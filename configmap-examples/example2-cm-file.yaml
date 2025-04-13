@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-index-file
+  namespace: default
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Hello CKAD</title>
+    </head>
+    <body>
+        <h1>Welcome to the CKAD exam test!</h1>
+        <p>This is a test paragraph for additional content.</p>
+        <footer>
+            <p>© 2025 CKAD Exam. All rights reserved.</p>
+        </footer>
+    </body>
+    </html>
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+  namespace: default
+  labels:
+    app: nginx
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      ports:
+        - containerPort: 80
+      volumeMounts:
+        - name: nginx-volume
+          mountPath: /usr/share/nginx/html/index.html
+          subPath: index.html
+  volumes:
+    - name: nginx-volume
+      configMap:
+        name: nginx-index-file

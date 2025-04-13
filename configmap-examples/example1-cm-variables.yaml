@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: default
+data:
+  # This is a comment
+  # The following are environment variables
+  APP_ENV: "production"
+  APP_LOG_LEVEL: "info"
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-pod
+  namespace: default
+spec:
+  containers:
+    - name: app-container
+      image: busybox
+      command: ["sh", "-c", "echo 'Environment Variables:' && env | sort"]
+      env:
+        - name: APP_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: APP_ENV
+        - name: APP_LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: APP_LOG_LEVEL
