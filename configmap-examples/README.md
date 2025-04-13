@@ -3,7 +3,8 @@
 *A ConfigMap is used to decouple configuration data (non-sensitive) from container images, letting you reuse and modify configs without rebuilding containers.*
 
 **example1-cm-variables.yaml**
-Thios example create a basic config map with variables and use it in a Pod as ENV VARs
+This example create a basic config map with variables and use it in a Pod as ENV VARs
+Look for the two pods created one uses Single Env that reference to the ConfigMap variable and other pod use evnFrom to reference to all the variables in the ConfigMap
 
 ```bash
 # Apply the changes
@@ -16,6 +17,7 @@ k logs app-pod
 k delete -f example1-cm-variables.yaml
 ```
 **example2-cm-file.yaml**
+This example create a configmap with the content of index.html, this will be replaced in the nginx pod using the configMap as Volume
 
 ```bash
 # Apply the changes

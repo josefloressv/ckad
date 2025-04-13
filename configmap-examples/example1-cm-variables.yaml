@@ -31,3 +31,18 @@ spec:
             configMapKeyRef:
               name: app-config
               key: APP_LOG_LEVEL
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-pod-map
+  namespace: default
+spec:
+  containers:
+    - name: app-container
+      image: busybox
+      command: ["sh", "-c", "echo 'Environment Variables:' && env | sort"]
+      envFrom:
+        - configMapRef:
+            name: app-config
