@@ -1,0 +1,50 @@
+# sa-deploy.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: custom-sa
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: pod-reader
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: read-pods
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: pod-reader
+subjects:
+- kind: ServiceAccount
+  name: custom-sa
+  namespace: default
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test
+  template:
+    metadata:
+      labels:
+        app: test
+    spec:
+      serviceAccountName: custom-sa
+      containers:
+      - name: curlimage
+        image: curlimages/curl
+        command: ["sleep", "3600"]
