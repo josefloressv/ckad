@@ -38,6 +38,11 @@ kubectl get pods --all-namespaces
 kubectl get pod -A
 ```
 
+Pods
+```bash
+kubectl delete pods --all
+```
+
 Explain commands
 ```bash
 kubectl explain pod
