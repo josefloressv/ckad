@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: example2-main-pod
+  labels:
+    app: example2-main-pod
+spec:
+  restartPolicy: Never
+  containers:
+  - name: main-pod
+    image: nginx
+    volumeMounts:
+    - name: shared-logs
+      mountPath: /var/log/nginx
+  - name: sidecar-logger
+    image: busybox
+    command: ["sh", "-c", "tail -f /var/log/nginx/access.log"]
+    volumeMounts:
+    - name: shared-logs
+      mountPath: /var/log/nginx
+  initContainers:
+  - name: sidecar-check-app
+    image: busybox
+    command: ["sh", "-c", "until nslookup example2-svc-app.default.svc.cluster.local; do echo waiting for example2-svc-app; sleep 1; done; echo service found!;"]
+
+  - name: sidecar-check-db
+    image: busybox
+    command: ["sh", "-c", "until nslookup example2-svc-db.default.svc.cluster.local; do echo waiting for example2-svc-db; sleep 1; done; echo service found!;"]
+
+  volumes:
+  - name: shared-logs
+    emptyDir: {}

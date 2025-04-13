@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: example2-svc-db
+  labels:
+    app: example2-svc-db
+spec:
+  containers:
+  - name: main-db
+    image: mysql
+    env:
+    - name: MYSQL_ALLOW_EMPTY_PASSWORD
+      value: "true"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: example2-svc-db
+  labels:
+    app: example2-svc-db
+spec:
+  selector:
+    app: example2-svc-db
+  ports:
+  - protocol: TCP
+    port: 3306
+    targetPort: 3306
+  type: ClusterIP
