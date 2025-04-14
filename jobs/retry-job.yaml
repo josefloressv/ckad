@@ -1,0 +1,13 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: retry-job
+spec:
+  backoffLimit: 3
+  template:
+    spec:
+      containers:
+      - name: run-script
+        image: busybox
+        command: ["sh", "-c", "exit 1"]
+      restartPolicy: Never

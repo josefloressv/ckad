@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: line-counter
+spec:
+  template:
+    spec:
+      containers:
+      - name: counter
+        image: busybox
+        command: ["sh", "-c"]
+        args:
+          - |
+            echo -e "line1\nline2\nline3" > /tmp/data.txt && \
+            wc -l /tmp/data.txt
+      restartPolicy: Never
+  backoffLimit: 2
