@@ -1,0 +1,1 @@
+k describe pod webapp-color | grep -A5 -i Environment:
